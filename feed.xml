@@ -2,52 +2,331 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>The Sunder blog</title>
-    <description>Thinking about learning. 
-</description>
+    <description></description>
     <link>rivesunder.github.io/</link>
     <atom:link href="rivesunder.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Apr 2018 12:30:57 +0100</pubDate>
-    <lastBuildDate>Mon, 23 Apr 2018 12:30:57 +0100</lastBuildDate>
+    <pubDate>Tue, 08 May 2018 06:36:13 +0100</pubDate>
+    <lastBuildDate>Tue, 08 May 2018 06:36:13 +0100</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
+        <title>Running retro-contest baselines</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/imgs/basslines.png&quot; alt=&quot;alt text&quot; title=&quot;...sorry&quot;&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Getting started described in a previous &lt;a href=&quot;https://rivesunder.github.io/retro-contest/2018/04/19/intro-to-retro-contest.html&quot;&gt;post.&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post we&amp;#39;ll take a look at the baseline agents built by OpenAI for completing the &amp;quot;Gotta Learn Fast&amp;quot; transfer learning benchmark based on Sonic the Hedgehog&amp;trade;. OpenAI baseline agents consist of JERK, a memorization bot; PPO, a policy gradient method; and Rainbow, a combination of improvements built on the deep Q learning used by Deepmind in their 2015 foray into atari mastery.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://github.com/openai/retro-baselines&quot;&gt;retro-baselines repository&lt;/a&gt; contains an agents folder with both the agents and corresponding dockerfiles for building a container for each agent. Clone the repository &lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone https://github.com/openai/retro-baselines&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;just-enough-retained-knowledge&quot;&gt;Just Enough Retained Knowledge&lt;/h1&gt;
+
+&lt;p&gt;cd into the agents directory so we can build a docker container for JERK.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# define registry if you haven&#39;t added this line to ~/.bashrc&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DOCKER_REGISTRY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;retrocontestlcabrnqjsuhzeptw.azurecr.io&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# build container for JERK&lt;/span&gt;
+docker build -f jerk.docker -t &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt;/jerk-agent:v1 .&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;One problem OpenAI is attempting to address with the Sonic benchmark and contest is poor separation of training and test sets in RL game-playing. Therefore we want to run our agent on a training/test split, and I&amp;#39;ll use the same list of &lt;a href=&quot;https://github.com/riveSunder/sonicBots/blob/master/data/sonic-test.csv&quot;&gt;test&lt;/a&gt; (and &lt;a href=&quot;https://github.com/riveSunder/sonicBots/blob/master/data/sonic-train.csv&quot;&gt;training&lt;/a&gt;) levels reported in OpenAI&amp;#39;s &lt;a href=&quot;https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/retro-contest/gotta_learn_fast_report.pdf&quot;&gt;technical report.&lt;/a&gt; But JERK doesn&amp;#39;t use any observations of the environment, so we can just run the bot on the test set, so we can just run it. To do so, I wrote a &lt;a href=&quot;&quot;&gt;wrapper&lt;/a&gt; that runs through the list of gamestates for the test set and runs JERK for 20 minutes of wall-time (impatience) and saves the results for each test level in a separate folder. My results on the test set: &lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;gamestate&lt;/th&gt;
+&lt;th style=&quot;text-align: center&quot;&gt;score&lt;/th&gt;
+&lt;th style=&quot;text-align: right&quot;&gt;std dev.&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisFlyingBatteryZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1253.13&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;143.98&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisLavaReefZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;126.72&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;239.68&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisHillTopZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1385.38&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;571.86&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisHydrocityZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;2140.97&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;1226.02&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisCasinoNightZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1663.08&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;1638.69&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisSpringYardZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;825.07&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;693.82&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisGreenHillZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;2327.98&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;1982.28&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisAngelIslandZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;806.91&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;564.96&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisScrapBrainZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1017.33&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;629.57&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisMetropolisZone.Act3&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1392.68&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;1047.23&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisStarLightZone.Act3&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;2369.18&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;414.58&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Aggregate&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1391.68&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;666.73&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;These are lower than the scores reported in the technical report-I didn&amp;#39;t feed the JERK much compute, limiting it to 20 minutes per test level.&lt;/p&gt;
+
+&lt;p&gt;Digging into the &lt;code&gt;jerk_agent.py&lt;/code&gt; code (and the algorithm description in the technical report) gives us a good idea of the &lt;em&gt;modus gofastus&lt;/em&gt; of the JERK approach. The bot will split its time according to a exploitation rate variable, hopefully finding a balance between reliving the glory days of its best run so far and exploring new things. The exploration strategy consists of running right for some number of steps while hopping with some probability, and the agent backtracks if it gets a negative reward trying to run right. So JERK, which stands for &amp;quot;Just Enough Retained Knowledge,&amp;quot; is a memorization bot with quite a few parameters (exploitation rate, jump probability, etc.) that can be painstakingly manually adjusted to slightly boost or totally destroy its performance.&lt;/p&gt;
+
+&lt;h1 id=&quot;proximal-policy-optimization&quot;&gt;Proximal Policy Optimization&lt;/h1&gt;
+
+&lt;p&gt;To run the ppo2 agent from the &lt;code&gt;retro-baselines&lt;/code&gt;, you&amp;#39;ll need to get the classic gym baselines from OpenAI on Github. &lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone http://github.com/openai/baselines
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;baselines
+pip install -e . &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+ 
+
+&lt;p&gt;I forked both the retro-baselines and the baselines repository from OpenAI so that I could keep track of changes I made while working with them on Github as well as locally. I suggest you do the same: forking is a good way to give credit to a repository&amp;#39;s creator. Not to mention if you really get into it and fix a few bugs or come up with a significant addition you can later do a pull request for your work to be considered as an addition to the main branch. You can build a docker container using the &lt;a href=&quot;https://github.com/openai/retro-baselines/blob/master/agents/ppo2.docker&quot;&gt;ppo2.docker file&lt;/a&gt; included in the retro-baselines repository. The ppo2 .docker file is more involved than the JERK .docker file and if, like me, you&amp;#39;re relatively new to rolling your own docker containers it&amp;#39;s a good idea to go through it to figure out what each part is up to and spend some time with &lt;a href=&quot;https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch&quot;&gt;the&lt;/a&gt; &lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;relevant&lt;/a&gt; &lt;a href=&quot;https://docs.docker.com/develop/develop-images/dockerfile_best-practices/&quot;&gt;documentation&lt;/a&gt;. Once you&amp;#39;re ready use cd into the agents directory and use &lt;code&gt;docker build&lt;/code&gt; as before to build the ppo2 container. &lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker build -f ppo2.docker -t &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt;/ppo2-agent:v1 .&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Running through the &lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;gamestate&lt;/th&gt;
+&lt;th style=&quot;text-align: center&quot;&gt;score&lt;/th&gt;
+&lt;th style=&quot;text-align: right&quot;&gt;std dev&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisFlyingBatteryZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;647.67&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;70.38&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisLavaReefZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1208.99&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;1438.33&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisHillTopZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;383.38&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;524.76&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisHydrocityZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;780.49&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;0.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisCasinoNightZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1286.41&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;995.79&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisSpringYardZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;377.86&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;169.72&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisGreenHillZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;2410.49&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;392.95&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisAngelIslandZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1634.78&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;663.77&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisScrapBrainZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;706.98&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;356.16&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisMetropolisZone.Act3&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;816.51&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;507.60&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisStarLightZone.Act3&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;2221.11&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;788.97&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Aggregate&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1134.06&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;665.42&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;a-rainbow-of-improvements-to-deep-q-learning&quot;&gt;A Rainbow of Improvements to Deep Q-learning&lt;/h1&gt;
+
+&lt;p&gt;Rainbow is a &lt;a href=&quot;https://arxiv.org/abs/1710.02298&quot;&gt;combination&lt;/a&gt; of different tweaks on DQN which together performed better than the original &amp;quot;human-level&amp;quot; DQN. To play around with Rainbow you&amp;#39;ll need to &lt;code&gt;pip install anyrl&lt;/code&gt; from &lt;a href=&quot;https://github.com/unixpickle/anyrl-py/tree/master/anyrl&quot;&gt;unixpickle&lt;/a&gt; (or clone/fork the repository as for baselines and retro-baselines earlier).  &lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker build -f rainbow.docker -t &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt;/rainbow-agent:v1 .&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+ 
+
+&lt;p&gt;Rainbow results on the validation levels:&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;gamestate&lt;/th&gt;
+&lt;th style=&quot;text-align: center&quot;&gt;score&lt;/th&gt;
+&lt;th style=&quot;text-align: right&quot;&gt;std dev&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisFlyingBatteryZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;212.03&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;79.87&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisLavaReefZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;32.95&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;0.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisHillTopZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;2.53&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;11.94&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisHydrocityZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;780.49&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;0.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisCasinoNightZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;266.96&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;0.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisSpringYardZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;195.13&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;32.39&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisGreenHillZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;4.41&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;20.81&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicAndKnuckles3-GenesisAngelIslandZone.Act2&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;635.29&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;521.91&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisScrapBrainZone.Act1&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;536.17&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;103.36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog2-GenesisMetropolisZone.Act3&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;295.91&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;2.12&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SonicTheHedgehog-GenesisStarLightZone.Act3&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;1084.55&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;1139.19&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Aggregate&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;367.86&lt;/td&gt;
+&lt;td style=&quot;text-align: right&quot;&gt;334.52&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;As expected, ppo2 and rainbow don&amp;#39;t learn particularly quickly with only 20 minutes wall time on a laptop (intel i5 2.40GHz × 4). Playing from scratch on OpenAI&amp;#39;s secret test levels, JERK, ppo2, and rainbow scored 3711.44, 3377.74, and 3443.59, respectively. There&amp;#39;s obviously plenty of room for improvement, and it will be interested to see how prior learning on the training levels might yield some better scores. I&amp;#39;ve also been trying (so far unsuccessfully) to build a wrapper for the Actor-Critic with Experience  Replay (&lt;a href=&quot;https://arxiv.org/abs/1611.01224&quot;&gt;Wang et al 2016&lt;/a&gt; on Arxiv) &lt;a href=&quot;https://github.com/openai/baselines/tree/master/baselines/acer&quot;&gt;implementation&lt;/a&gt; from openai/baselines, but I&amp;#39;m having trouble with the gym remote environment interface. &lt;/p&gt;
+
+&lt;p&gt;In my next entry I hope to showcase some actual, ahem, transfer learning with one of the baseline agents, as well as making better progress on implementing an agent not demonstrated in the technical report. &lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 May 2018 00:38:32 +0100</pubDate>
+        <link>rivesunder.github.io/20180507RetroContestBaselines/</link>
+        <guid isPermaLink="true">rivesunder.github.io/20180507RetroContestBaselines/</guid>
+        
+        
+        <category>retro-contest</category>
+        
+      </item>
+    
+      <item>
         <title>OpenAI&#39;s retro contest</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/imgs/philosonic.png&quot; alt=&quot;alt text&quot; title=&quot;To go or not to go fast, eh?&quot; /&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;img src=&quot;/imgs/philosonic.png&quot; alt=&quot;alt text&quot; title=&quot;To go or not to go fast, eh?&quot;&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;A bot must learn to go fast&lt;/li&gt;
-  &lt;li&gt;A bot must learn to learn to go fast quickly.&lt;/li&gt;
-  &lt;li&gt;A bot should also try not to die, so long as survival does not conflict with going fast or figuring out how to do so quickly.&lt;/li&gt;
+&lt;li&gt;A bot must learn to go fast&lt;/li&gt;
+&lt;li&gt;A bot must learn to learn to go fast quickly.&lt;/li&gt;
+&lt;li&gt;A bot should also try not to die, so long as survival does not conflict with going fast or figuring out how to do so quickly. &lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;-Three laws for bots by Asimov or somebody&lt;/p&gt;
 
 &lt;p align=&quot;center&quot;&gt;&lt;em&gt;The contest described below runs until June 5. Registering requires manual approval, and can take a few hours or so. It might save some time to &lt;a href=&quot;https://contest.openai.com/register&quot;&gt;register&lt;/a&gt;&lt;/em&gt; first.&lt;/p&gt;
 
-&lt;p&gt;OpenAI has released a &lt;a href=&quot;https://storage.googleapis.com/agi-data/blog/gym-retro/contest-tech-report.pdf&quot;&gt;
-benchmark&lt;/a&gt; for reinforcement transfer learning with accompanying &lt;a href=&quot;https://contest.OpenAI.com/&quot;&gt;contest&lt;/a&gt;. The benchmark consists of custom test levels designed for “Sonic the Hedgehog™“&lt;a href=&quot;#fn1&quot; title=&quot;Sonic is named after the much more famous sonic hedgehog signalling protein important in developmental regulation. The titular video game character is named for his likeness to fruit flies carrying a mutation in the gene.&quot;&gt;&lt;sup&gt;[1]&lt;/sup&gt;&lt;/a&gt; games for the Sega Genesis. This contest comes with a promised cool trophy for whoever builds the bot that performs best on unseen test levels from Sonic the Hedgehog™ , Sonic the Hedgehog™ 2, and Sonic 3 &amp;amp; Knuckles.&lt;/p&gt;
+&lt;p&gt;OpenAI has released a &lt;a 
+href=&quot;https://storage.googleapis.com/agi-data/blog/gym-retro/contest-tech-report.pdf&quot;&gt;
+benchmark&lt;/a&gt; for reinforcement transfer learning with accompanying &lt;a href=&quot;https://contest.OpenAI.com/&quot;&gt;contest&lt;/a&gt;. The benchmark consists of custom test levels designed for &amp;quot;Sonic the Hedgehog&amp;trade;&amp;quot;&lt;a href=&quot;#fn1&quot; title=&quot;Sonic is named after the much more famous sonic hedgehog signalling protein important in developmental regulation. The titular video game character is named for his likeness to fruit flies carrying a mutation in the gene.&quot;&gt;&lt;sup&gt;[1]&lt;/sup&gt;&lt;/a&gt; games for the Sega Genesis. This contest comes with a promised cool trophy for whoever builds the bot that performs best on unseen test levels from Sonic the Hedgehog&amp;trade; , Sonic the Hedgehog&amp;trade; 2, and Sonic 3 &amp;amp; Knuckles.&lt;/p&gt;
 
-&lt;p&gt;It’s not that Yours Truly has a chance at one of those “cool trophies,” but I hope that publishing a series of notes about approaching reinforcement learning starting from zero will be useful for someone in the future (maybe even me). Where supervised/unsupervised learning (especially classification) has generated a plethora of ground-level resources and tutorials to get started. Therefore this series of posts is intended as a collection point for resource pointers.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not that Yours Truly has a chance at one of those &amp;quot;cool trophies,&amp;quot; but I hope that publishing a series of notes about approaching reinforcement learning starting from zero will be useful for someone in the future (maybe even me). Where supervised/unsupervised learning (especially classification) has generated a plethora of ground-level resources and tutorials to get started. Therefore this series of posts is intended as a collection point for resource pointers. &lt;/p&gt;
 
-&lt;p&gt;I have experimented with evolutionary algorithms to some success on the simpler (generally note pixel-based observations), and I have had a look at Karpathy’s policy gradient &lt;a href=&quot;https://gist.github.com/karpathy/a4166c7fe253700972fcbc77e4ea32c5&quot;&gt;example for pong&lt;/a&gt;. Aside from the mentioned nascent forays, I’ll be picking it up as a go along.&lt;/p&gt;
+&lt;p&gt;I have experimented with evolutionary algorithms to some success on the simpler (generally note pixel-based observations), and I have had a look at Karpathy&amp;#39;s policy gradient &lt;a href=&quot;https://gist.github.com/karpathy/a4166c7fe253700972fcbc77e4ea32c5&quot;&gt;example for pong&lt;/a&gt;. Aside from the mentioned nascent forays, I&amp;#39;ll be picking it up as a go along.  &lt;/p&gt;
 
 &lt;h2&gt;What is reinforcement learning and why do we need it?&lt;/h2&gt;
 
-&lt;p&gt;The prospect of creating a (non-human&lt;a href=&quot;#fn2&quot; title=&quot;Apparently producing a human general intelligence is a pretty straightforward process.&quot;&gt;&lt;sup&gt;[2]&lt;/sup&gt;&lt;/a&gt;) general intelligence would have nearly the same potential impact as making contact with an extraterrestrial intelligence: that is, we predict that it would be a very big deal but it is very difficult to pin down the specifics of what it would entail. Reinforcement learning falls somewhere between supervised/unsupervised machine learning and general intelligence. Although RL certainly is certainly closer to the former than the latter, it shares some important aspects with how we might expect a generally intelligent agent to interact with an environment.&lt;/p&gt;
+&lt;p&gt;The prospect of creating a (non-human&lt;a href=&quot;#fn2&quot; title=&quot;Apparently producing a human general intelligence is a pretty straightforward process.&quot;&gt;&lt;sup&gt;[2]&lt;/sup&gt;&lt;/a&gt;) general intelligence would have nearly the same potential impact as making contact with an extraterrestrial intelligence: that is, we predict that it would be a very big deal but it is very difficult to pin down the specifics of what it would entail. Reinforcement learning falls somewhere between supervised/unsupervised machine learning and general intelligence. Although RL certainly is certainly closer to the former than the latter, it shares some important aspects with how we might expect a generally intelligent agent to interact with an environment. &lt;/p&gt;
 
-&lt;p&gt;Unlike supervised learning, a reinforcement learning agent does not receive explicit error information about actions it takes. The agent is free to explore the environment and devise its own strategies to most readily exploit the environment to acheive some goal. But the agent also does not receive any explicit goal definitions. Instead, and unlike my PhD experience, the environment returns a scalar reward value derived from the environment state. The reward value is the objective function of reinforcement learning, and how the reward is doled out (and learning to predict how it will be doled out over time) is an essential aspect of a bot’s ability to learn to succeed in an environment.&lt;/p&gt;
+&lt;p&gt;Unlike supervised learning, a reinforcement learning agent does not receive explicit error information about actions it takes. The agent is free to explore the environment and devise its own strategies to most readily exploit the environment to acheive some goal. But the agent also does not receive any explicit goal definitions. Instead, and unlike my PhD experience, the environment returns a scalar reward value derived from the environment state. The reward value is the objective function of reinforcement learning, and how the reward is doled out (and learning to predict how it will be doled out over time) is an essential aspect of a bot&amp;#39;s ability to learn to succeed in an environment. &lt;/p&gt;
 
-&lt;p&gt;A reinforcement learning agent can learn to do very well in game environments, without learning to be very smart. In fact RL agents (using DQN) have been playing simple arcade games at &lt;a href=&quot;https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf&quot;&gt;human-level or better&lt;/a&gt; since at least 2014. But humans still learn much faster, and discover and apply new information, driven by curiosity, much more easily than bots. One major reason humans pick up new games faster than bots is &lt;a href=&quot;https://en.wikipedia.org/wiki/Transfer_learning&quot;&gt;transfer learning&lt;/a&gt;. You can try out masked versions of arcade games designed to disrupt your ability to apply prior knowledge &lt;a href=&quot;https://rach0012.github.io/humanRL_website/&quot;&gt;here&lt;/a&gt;, to see how much more difficult it is to learn a new game when it appears totally alien (&lt;a href=&quot;https://rach0012.github.io/humanRL_website/humanRL_ICLR.pdf&quot;&gt;paper&lt;/a&gt;). By holding out custom test levels, the principal aim of the retro gaming contest is to improve transfer learning to an environment that is different in details but similar in gameplay. In other words, your goal is to create a bot that develops some prior knowledge about the principles of going fast and what makes up the environments and reward structure of Sonic games.&lt;/p&gt;
+&lt;p&gt;A reinforcement learning agent can learn to do very well in game environments, without learning to be very smart. In fact RL agents (using DQN) have been playing simple arcade games at &lt;a href=&quot;https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf&quot;&gt;human-level or better&lt;/a&gt; since at least 2014. But humans still learn much faster, and discover and apply new information, driven by curiosity, much more easily than bots. One major reason humans pick up new games faster than bots is &lt;a href=&quot;https://en.wikipedia.org/wiki/Transfer_learning&quot;&gt;transfer learning&lt;/a&gt;. You can try out masked versions of arcade games designed to disrupt your ability to apply prior knowledge &lt;a href=&quot;https://rach0012.github.io/humanRL_website/&quot;&gt;here&lt;/a&gt;, to see how much more difficult it is to learn a new game when it appears totally alien (&lt;a href=&quot;https://rach0012.github.io/humanRL_website/humanRL_ICLR.pdf&quot;&gt;paper&lt;/a&gt;). By holding out custom test levels, the principal aim of the retro gaming contest is to improve transfer learning to an environment that is different in details but similar in gameplay. In other words, your goal is to create a bot that develops some prior knowledge about the principles of going fast and what makes up the environments and reward structure of Sonic games. &lt;/p&gt;
 
 &lt;h2&gt;Setting up the retro environment&lt;/h2&gt;
 
-&lt;p&gt;The following are my annotations of the process described on the contest details page &lt;a href=&quot;https://contest.OpenAI.com/details&quot;&gt;https://contest.OpenAI.com/details&lt;/a&gt; and the Github repo &lt;a href=&quot;https://github.com/OpenAI/retro&quot;&gt;https://github.com/OpenAI/retro&lt;/a&gt;. To be clear, these are just my notes on OpenAI’s instructions, all credit goes to their contest team. I am working with Ubuntu 16.04, but there are also instructions for Mac OS and Windows.&lt;/p&gt;
+&lt;p&gt;The following are my annotations of the process described on the contest details page &lt;a href=&quot;https://contest.OpenAI.com/details&quot;&gt;&lt;a href=&quot;https://contest.OpenAI.com/details&quot;&gt;https://contest.OpenAI.com/details&lt;/a&gt;&lt;/a&gt; and the Github repo &lt;a href=&quot;https://github.com/OpenAI/retro&quot;&gt;&lt;a href=&quot;https://github.com/OpenAI/retro&quot;&gt;https://github.com/OpenAI/retro&lt;/a&gt;&lt;/a&gt;. To be clear, these are just my notes on OpenAI&amp;#39;s instructions, all credit goes to their contest team. I am working with Ubuntu 16.04, but there are also instructions for Mac OS and Windows. &lt;/p&gt;
 
-&lt;p&gt;After activating my anaconda environment for game bots, I used the following command to install the retro environment.&lt;/p&gt;
+&lt;p&gt;After activating my anaconda environment for game bots, I used the following command to install the retro environment. &lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pip3 install https://storage.googleapis.com/gym-retro/builds/gym_retro-0.5.3-cp36-cp36m-linux_x86_64.whl&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;However, as of a few days ago commit &lt;a href=&quot;https://github.com/OpenAI/retro/commit/9ae72b19efc7ba5159b605e26a7ee70ebf9334b2&quot;&gt;9ae72b1…&lt;/a&gt; has added gym-retro to PyPI so you can simply use pip.&lt;/p&gt;
+&lt;p&gt;However, as of a few days ago commit &lt;a href=&quot;https://github.com/OpenAI/retro/commit/9ae72b19efc7ba5159b605e26a7ee70ebf9334b2&quot;&gt;9ae72b1...&lt;/a&gt; has added gym-retro to PyPI so you can simply use pip. &lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pip3 install gym-retro&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -82,21 +361,21 @@ pip install -e &lt;span class=&quot;s2&quot;&gt;&quot;retro-contest/support[dock
 
 &lt;h2&gt;Buy Sonic?&lt;/h2&gt;
 
-&lt;p&gt;You don’t technically need to buy the Sonic games, but it’s safe to say training experience is more likely to transfer to the custom levels if it’s from the same games. OpenAI recommends &lt;a href=&quot;http://store.steampowered.com/app/71113/Sonic_The_Hedgehog/&quot;&gt;Sonic the Hedgehog&lt;/a&gt;, &lt;a href=&quot;http://store.steampowered.com/app/71163/Sonic_The_Hedgehog_2/&quot;&gt;Sonic the Hedgehog 2&lt;/a&gt;, and &lt;a href=&quot;http://store.steampowered.com/app/71162/Sonic_3___Knuckles/&quot;&gt;Sonic 3 &amp;amp; Knuckles&lt;/a&gt; for training. I also had to install the Steam desktop client to get the following import command to work.&lt;/p&gt;
+&lt;p&gt;You don&amp;#39;t technically need to buy the Sonic games, but it&amp;#39;s safe to say training experience is more likely to transfer to the custom levels if it&amp;#39;s from the same games. OpenAI recommends &lt;a href=&quot;http://store.steampowered.com/app/71113/Sonic_The_Hedgehog/&quot;&gt;Sonic the Hedgehog&lt;/a&gt;, &lt;a href=&quot;http://store.steampowered.com/app/71163/Sonic_The_Hedgehog_2/&quot;&gt;Sonic the Hedgehog 2&lt;/a&gt;, and &lt;a href=&quot;http://store.steampowered.com/app/71162/Sonic_3___Knuckles/&quot;&gt;Sonic 3 &amp;amp; Knuckles&lt;/a&gt; for training. I also had to install the Steam desktop client to get the following import command to work. &lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python -m retro.import.sega_classics&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;I’ll admit it’s a bit conspicuous that OpenAI is launching a contest based on playing paid games from Valve’s Steam store less than two months after Gabe Newell joined the list of donors, but hey. Hey. . .&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ll admit it&amp;#39;s a bit conspicuous that OpenAI is launching a contest based on playing paid games from Valve&amp;#39;s Steam store less than two months after Gabe Newell joined the list of donors, but hey. Hey. . . &lt;/p&gt;
 
-&lt;p&gt;Once you have imported the Sega ROMs, you can start building and testing your agents. One approach is to set myAction[7] = 1 for every time step. This random right agent will get you about 1300 points on the leaderboard, but in order to do that you’ll need to register for the contest, set up Docker, and build and push a container with &lt;a href=&quot;https://contest.openai.com/static/simple-agent.py&quot;&gt;simple-agent.py&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Once you have imported the Sega ROMs, you can start building and testing your agents. One approach is to set myAction[7] = 1 for every time step. This random right agent will get you about 1300 points on the leaderboard, but in order to do that you&amp;#39;ll need to register for the contest, set up Docker, and build and push a container with &lt;a href=&quot;https://contest.openai.com/static/simple-agent.py&quot;&gt;simple-agent.py&lt;/a&gt;. &lt;/p&gt;
 
-&lt;p&gt;Register for the contest &lt;a href=&quot;https://contest.openai.com/register&quot;&gt;here&lt;/a&gt;, then make sure you have Docker installed on your system. Try running your agent locally.&lt;/p&gt;
+&lt;p&gt;Register for the contest &lt;a href=&quot;https://contest.openai.com/register&quot;&gt;here&lt;/a&gt;, then make sure you have Docker installed on your system. Try running your agent locally. &lt;/p&gt;
 
-&lt;p&gt;Make a new directory and put &lt;a href=&quot;https://contest.openai.com/static/simple-agent.py&quot;&gt;simple-agent.py&lt;/a&gt; and &lt;a href=&quot;https://contest.openai.com/static/simple-agent.docker&quot;&gt;simple-agent.docker&lt;/a&gt; in there, then you can build a docker container that runs the agent.&lt;/p&gt;
+&lt;p&gt;Make a new directory and put &lt;a href=&quot;https://contest.openai.com/static/simple-agent.py&quot;&gt;simple-agent.py&lt;/a&gt; and &lt;a href=&quot;https://contest.openai.com/static/simple-agent.docker&quot;&gt;simple-agent.docker&lt;/a&gt; in there, then you can build a docker container that runs the agent. &lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker build -f simple-agent.docker -t &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt;/simple-agent:v1 .&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;To mimic the testing process you’ll need to set up the docker container retro-env and tag it as remote-env as shown below.&lt;/p&gt;
+&lt;p&gt;To mimic the testing process you&amp;#39;ll need to set up the docker container retro-env and tag it as remote-env as shown below. &lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker pull openai/retro-env
 docker tag openai/retro-env remote-env
@@ -104,11 +383,11 @@ docker tag openai/retro-env remote-env
 retro-contest run --agent &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt;/simple-agent:v1 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     --results-dir results --no-nv SonicTheHedgehog-Genesis LabyrinthZone.Act1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Use&lt;/p&gt;
+&lt;p&gt;Use 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;--no-nv Airstriker-Genesis Level1 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;if you haven’t imported the Sonic ROM yet.&lt;/p&gt;
+ if you haven&amp;#39;t imported the Sonic ROM yet. &lt;/p&gt;
 
-&lt;p&gt;This runs the game and level specified by –no-nv and stores the results in the directory specified by –results-dir in a file called monitor.csv, where the accumulated reward is given in the first column.&lt;/p&gt;
+&lt;p&gt;This runs the game and level specified by --no-nv and stores the results in the directory specified by --results-dir in a file called monitor.csv, where the accumulated reward is given in the first column. &lt;/p&gt;
 
 &lt;h2&gt;Making it official: getting on the leaderboard with simple-agent.py&lt;/h2&gt;
 
@@ -119,13 +398,13 @@ docker login &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt; &lt;
     --username &amp;lt;docker registry username&amp;gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     --password &amp;lt;docker registry password&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;While logged in the quick start guide on the &lt;a href=&quot;https://contest.openai.com/details&quot;&gt;contest details page&lt;/a&gt; will pre-populate the above for you.&lt;/p&gt;
+&lt;p&gt;While logged in the quick start guide on the &lt;a href=&quot;https://contest.openai.com/details&quot;&gt;contest details page&lt;/a&gt; will pre-populate the above for you. &lt;/p&gt;
 
-&lt;p&gt;At this point everything should be in place so that you can make a test submission to get on the leaderboard and validate that your workflow is working. Push the docker container to the contest registry:&lt;/p&gt;
+&lt;p&gt;At this point everything should be in place so that you can make a test submission to get on the leaderboard and validate that your workflow is working. Push the docker container to the contest registry: &lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker push &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt;/simple-agent:v1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The first time you do this it may take some time to upload the whole container, but subsequent pushes should be much faster as you’ll modify the existing container to run your agents, and the shared container layers don’t need to be re-uploaded each time. You can designate that you want to run the container for a score by going logging in to the contest and going to the Jobs tab to start a new job called “simple-agent:v1” or whatever the name of the docker container you pushed.&lt;/p&gt;
+&lt;p&gt;The first time you do this it may take some time to upload the whole container, but subsequent pushes should be much faster as you&amp;#39;ll modify the existing container to run your agents, and the shared container layers don&amp;#39;t need to be re-uploaded each time. You can designate that you want to run the container for a score by going logging in to the contest and going to the Jobs tab to start a new job called &amp;quot;simple-agent:v1&amp;quot; or whatever the name of the docker container you pushed.&lt;/p&gt;
 
 &lt;p&gt;To make a container to run your bespoke bots, you can add the code, models, and any other files and startup commands for the container by following the form of &lt;a href=&quot;https://contest.openai.com/static/simple-agent.docker&quot;&gt;simple-agent.docker&lt;/a&gt;. For example I made a container for a &lt;a href=&quot;https://github.com/riveSunder/sonicBots/tree/master/dunceSonic&quot;&gt;bot&lt;/a&gt; that scores even worse than simple-agent, earning me the prestiguous last-place spot on the leaderboard. Below, FROM defines the ancestor container, ADD tells Docker what files to add, and CMD tells the container what commands to issue when it starts. &lt;em&gt;e.g.&lt;/em&gt;&lt;/p&gt;
 
@@ -133,33 +412,33 @@ docker login &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY&lt;/span&gt; &lt;
 ADD sonicTheDunce.py .
 CMD &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;python&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;-u&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;/root/compo/sonicTheDunce.py&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;That’s it for now. Next I plan to investigate the &lt;a href=&quot;https://github.com/openai/retro-baselines&quot;&gt;contest baselines&lt;/a&gt; developed by OpenAI: Rainbow, PPO, and JERK.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s it for now. Next I plan to investigate the &lt;a href=&quot;https://github.com/openai/retro-baselines&quot;&gt;contest baselines&lt;/a&gt; developed by OpenAI: Rainbow, PPO, and JERK. &lt;/p&gt;
 
 &lt;p&gt;In the meantime, below is a non-exhaustive list of resources:&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Contest resources&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;retro-gym repository: &lt;a href=&quot;https://github.com/OpenAI/retro&quot;&gt;https://github.com/OpenAI/retro&lt;/a&gt;
-retro-contest repository: &lt;a href=&quot;https://github.com/openai/retro-contest&quot;&gt;https://github.com/openai/retro-contest&lt;/a&gt;
-Baselines repository: &lt;a href=&quot;https://github.com/openai/retro-baselines&quot;&gt;https://github.com/openai/retro-baselines&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;retro-gym repository: &lt;a href=&quot;https://github.com/OpenAI/retro&quot;&gt;&lt;a href=&quot;https://github.com/OpenAI/retro&quot;&gt;https://github.com/OpenAI/retro&lt;/a&gt;&lt;/a&gt;
+retro-contest repository: &lt;a href=&quot;https://github.com/openai/retro-contest&quot;&gt;&lt;a href=&quot;https://github.com/openai/retro-contest&quot;&gt;https://github.com/openai/retro-contest&lt;/a&gt;&lt;/a&gt;
+Baselines repository: &lt;a href=&quot;https://github.com/openai/retro-baselines&quot;&gt;&lt;a href=&quot;https://github.com/openai/retro-baselines&quot;&gt;https://github.com/openai/retro-baselines&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;OpenAI blog post: &lt;a href=&quot;https://blog.OpenAI.com/retro-contest/&quot;&gt;https://blog.OpenAI.com/retro-contest/&lt;/a&gt;
-Contest page: &lt;a href=&quot;https://contest.OpenAI.com/&quot;&gt;https://contest.OpenAI.com/&lt;/a&gt;
-Technical report: &lt;a href=&quot;https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/retro-contest/gotta_learn_fast_report.pdf&quot;&gt;https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/retro-contest/gotta_learn_fast_report.pdf&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;OpenAI blog post: &lt;a href=&quot;https://blog.OpenAI.com/retro-contest/&quot;&gt;&lt;a href=&quot;https://blog.OpenAI.com/retro-contest/&quot;&gt;https://blog.OpenAI.com/retro-contest/&lt;/a&gt;&lt;/a&gt;
+Contest page: &lt;a href=&quot;https://contest.OpenAI.com/&quot;&gt;&lt;a href=&quot;https://contest.OpenAI.com/&quot;&gt;https://contest.OpenAI.com/&lt;/a&gt;&lt;/a&gt;
+Technical report: &lt;a href=&quot;https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/retro-contest/gotta_learn_fast_report.pdf&quot;&gt;&lt;a href=&quot;https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/retro-contest/gotta_learn_fast_report.pdf&quot;&gt;https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/retro-contest/gotta_learn_fast_report.pdf&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Contest-adjacent papers&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://www.ijcai.org/Proceedings/15/Papers/585.pdf&quot;&gt;
-M. G. Bellemare, Y. Naddaf, J. Veness, and M. Bowling, “The Arcade Learning Environment:
-An evaluation platform for general agents,” Journal of Artificial Intelligence Research, vol. 47,
+M. G. Bellemare, Y. Naddaf, J. Veness, and M. Bowling, &amp;quot;The Arcade Learning Environment:
+An evaluation platform for general agents,&amp;quot; Journal of Artificial Intelligence Research, vol. 47,
 pp. 253–279, Jun. 2013.&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1611.02205&quot;&gt;Playing SNES in the Retro Learning Environment
 Nadav Bhonker, Shai Rozenberg, Itay Hubara. Arxiv. 2017.&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1707.06347&quot;&gt; J.  Schulman,  F.  Wolski,  P.  Dhariwal,  A.  Radford,  and  O.  Klimov,  “Proximal  policy  optimization algorithms,” 2017. eprint: arXiv:1707.06347.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1707.06347&quot;&gt; J.  Schulman,  F.  Wolski,  P.  Dhariwal,  A.  Radford,  and  O.  Klimov,  &amp;quot;Proximal  policy  optimization algorithms,&amp;quot; 2017. eprint: arXiv:1707.06347.&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1710.02298&quot;&gt;M.  Hessel,  J.  Modayil,  H.  van  Hasselt,  T.  Schaul,  G.  Ostrovski,  W.  Dabney,  D.  Horgan, B. Piot, M. Azar, and D. Silver, “Rainbow: Combining improvements in deep reinforcement learning,” 2017. eprint: arXiv:1710.02298.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1710.02298&quot;&gt;M.  Hessel,  J.  Modayil,  H.  van  Hasselt,  T.  Schaul,  G.  Ostrovski,  W.  Dabney,  D.  Horgan, B. Piot, M. Azar, and D. Silver, &amp;quot;Rainbow: Combining improvements in deep reinforcement learning,&amp;quot; 2017. eprint: arXiv:1710.02298.&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf&quot;&gt;
 V. Mnih, K. Kavukcuoglu, D. Silver, A. A. Rusu, J. Veness, M. G. Bellemare, A. Graves,
@@ -167,9 +446,10 @@ M. Riedmiller, A. K. Fidjeland, G. Ostrovski, et al., “Human-level control thr
 reinforcement learning,” Nature, vol. 518, no. 7540, pp. 529–533, 2015&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;fn1&quot;&gt; &lt;/h2&gt;
-&lt;p&gt;[1] Sonic is named after the much more famous sonic hedgehog &lt;a href=&quot;https://en.wikipedia.org/wiki/Sonic_hedgehog&quot;&gt;signalling protein&lt;/a&gt; important in developmental regulation. The titular video game character is named for his likeness to fruit flies carrying a mutation in the gene.&lt;/p&gt;
+
+&lt;p&gt;[1] Sonic is named after the much more famous sonic hedgehog &lt;a href=&quot;https://en.wikipedia.org/wiki/Sonic_hedgehog&quot;&gt;signalling protein&lt;/a&gt; important in developmental regulation. The titular video game character is named for his likeness to fruit flies carrying a mutation in the gene. 
 &lt;h2 id=&quot;fn2&quot;&gt; &lt;/h2&gt;
-&lt;p&gt;[2] Apparently producing a human general intelligence is a pretty straightforward process.&lt;/p&gt;
+[2] Apparently producing a human general intelligence is a pretty straightforward process.&lt;/p&gt;
 </description>
         <pubDate>Thu, 19 Apr 2018 11:38:32 +0100</pubDate>
         <link>rivesunder.github.io/retro-contest/2018/04/19/intro-to-retro-contest.html</link>
