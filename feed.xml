@@ -5,8 +5,8 @@
     <description></description>
     <link>rivesunder.github.io/</link>
     <atom:link href="rivesunder.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 08 May 2018 06:36:13 +0100</pubDate>
-    <lastBuildDate>Tue, 08 May 2018 06:36:13 +0100</lastBuildDate>
+    <pubDate>Tue, 08 May 2018 06:54:21 +0100</pubDate>
+    <lastBuildDate>Tue, 08 May 2018 06:54:21 +0100</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -105,7 +105,7 @@ docker build -f jerk.docker -t &lt;span class=&quot;nv&quot;&gt;$DOCKER_REGISTRY
 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 
-&lt;p&gt;These are lower than the scores reported in the technical report-I didn&amp;#39;t feed the JERK much compute, limiting it to 20 minutes per test level.&lt;/p&gt;
+&lt;p&gt;These are lower than the scores reported in the technical report. I didn&amp;#39;t feed the JERK much compute, limiting it to 20 minutes per test level.&lt;/p&gt;
 
 &lt;p&gt;Digging into the &lt;code&gt;jerk_agent.py&lt;/code&gt; code (and the algorithm description in the technical report) gives us a good idea of the &lt;em&gt;modus gofastus&lt;/em&gt; of the JERK approach. The bot will split its time according to a exploitation rate variable, hopefully finding a balance between reliving the glory days of its best run so far and exploring new things. The exploration strategy consists of running right for some number of steps while hopping with some probability, and the agent backtracks if it gets a negative reward trying to run right. So JERK, which stands for &amp;quot;Just Enough Retained Knowledge,&amp;quot; is a memorization bot with quite a few parameters (exploitation rate, jump probability, etc.) that can be painstakingly manually adjusted to slightly boost or totally destroy its performance.&lt;/p&gt;
 
@@ -278,6 +278,8 @@ pip install -e . &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;As expected, ppo2 and rainbow don&amp;#39;t learn particularly quickly with only 20 minutes wall time on a laptop (intel i5 2.40GHz × 4). Playing from scratch on OpenAI&amp;#39;s secret test levels, JERK, ppo2, and rainbow scored 3711.44, 3377.74, and 3443.59, respectively. There&amp;#39;s obviously plenty of room for improvement, and it will be interested to see how prior learning on the training levels might yield some better scores. I&amp;#39;ve also been trying (so far unsuccessfully) to build a wrapper for the Actor-Critic with Experience  Replay (&lt;a href=&quot;https://arxiv.org/abs/1611.01224&quot;&gt;Wang et al 2016&lt;/a&gt; on Arxiv) &lt;a href=&quot;https://github.com/openai/baselines/tree/master/baselines/acer&quot;&gt;implementation&lt;/a&gt; from openai/baselines, but I&amp;#39;m having trouble with the gym remote environment interface. &lt;/p&gt;
 
 &lt;p&gt;In my next entry I hope to showcase some actual, ahem, transfer learning with one of the baseline agents, as well as making better progress on implementing an agent not demonstrated in the technical report. &lt;/p&gt;
+
+&lt;p&gt;@tristansokol has been very prolific journalling his retro-contest progress on Medium, including&lt;a href=&quot;https://medium.com/@tristansokol/making-fun-visuals-history-maps-and-other-tool-improvements-eb5ffe187fd3&quot;&gt;this post&lt;/a&gt; of useful visualizations. &lt;/p&gt;
 </description>
         <pubDate>Mon, 07 May 2018 00:38:32 +0100</pubDate>
         <link>rivesunder.github.io/20180507RetroContestBaselines/</link>
