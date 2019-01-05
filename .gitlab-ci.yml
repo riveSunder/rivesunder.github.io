@@ -6,14 +6,14 @@ variables:
 
 before_script:
   - bundle install
+  - cd blog
 
 test:
   stage: test
   script:
-  - bundle exec jekyll build -s blog -d test
+  - bundle exec jekyll build -d ../test
   artifacts:
     paths:
-    - blog
     - test
   except:
   - master
@@ -21,10 +21,9 @@ test:
 pages:
   stage: deploy
   script:
-  - bundle exec jekyll build -s blog -d public
+  - bundle exec jekyll build -d ../public
   artifacts:
     paths:
-    - blog
-    - public
+    - ../public
   only:
   - master
