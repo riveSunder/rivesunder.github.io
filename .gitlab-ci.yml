@@ -6,7 +6,6 @@ variables:
 
 before_script:
   - gem uninstall bundler
-  - mv Gemfile.lock Gemfile_not.lock
   - bundle install
 
 test:
