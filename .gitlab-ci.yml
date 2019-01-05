@@ -13,6 +13,7 @@ test:
   - bundle exec jekyll build -s blog -d test
   artifacts:
     paths:
+    - blog
     - test
   except:
   - master
@@ -23,6 +24,7 @@ pages:
   - bundle exec jekyll build -s blog -d public
   artifacts:
     paths:
+    - blog
     - public
   only:
   - master
