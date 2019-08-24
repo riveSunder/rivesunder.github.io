@@ -17,8 +17,8 @@ title: The Rive Sunder Blog
 #email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   The blog of Rive Sunder
-baseurl: "/blog"
-url: "https://rivesunder.gitlab.com"
+baseurl: ""
+url: "https://rivesunder.gitlab.io"
 twitter_username: rivesunder
 #github_username:  rivesunder
 gitlab_username: rivesunder
