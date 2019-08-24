@@ -7,7 +7,7 @@ categories: jekyll update
 
 # How to Break Your Random Network Distillation
 <div align="center">
-<img src="/blog/assets/small_weights_0_5_out_pred.png">
+<img src="/assets/small_weights_0_5_out_pred.png">
 </div>
 
 <em>TL:DR To be capable of curiosity-driven exploration, an agent must be capable of being surprised.  to learn features that are too similar to the rules of the universe, and as a result is apparently incapable of escaping boredom.</em>
@@ -38,14 +38,14 @@ OpenAI used random network distillation to be one of the first (concurrent with 
 # Strategy 1: predictor learns universal physics instead of curiosity
 
 <div align="center">
-<img src="/blog/assets/convnet_predictor_not_surprised.png">
+<img src="/assets/convnet_predictor_not_surprised.png">
 </div>
 The next state of any given cell in a CA universe is fully determined by the state of its immediately adjacent neighbors. Each cell's next state depends entirely on its own current state and that of the neighbors sharing a local 3x3 grid. Consequently it's not surprising that using conv-nets with 3x3 convolution kernels for both random transformation and to learn said transformation is a recipe for a very non-curious bot. With both the random network and the predictor producing spatially invariant outputs, a novel scene will continue to generate the same reward signal so long as the rules remain unchanged. 
 
 # Strategy 2: bad random initialization
 
 <div align="center">
-<img src="/blog/assets/small_weights_0_5_output.png">
+<img src="/assets/small_weights_0_5_output.png">
 </div>
 
 
@@ -54,7 +54,7 @@ Another failure mode for random network distillation occurs from bad initializat
 # Strategy 3: non-static random networks
 
 <div align="center">
-<img src="/blog/assets/resetting_rn_no_surprise.png">
+<img src="/assets/resetting_rn_no_surprise.png">
 </div>
 
 This last method for breaking RND is matter of code hygeine rather than a strategic mistake. Early on in this project I had a bug in my code that led to the random network being reset each episode, which led to a boost in rewards as the prediction network had to re-learn the (new) transformation each time. There's nothing clever about fixing this problem by using a static seed, but it's a good reminder that writing bug-free code can be make-or-break when building new implementations. 
@@ -62,8 +62,8 @@ This last method for breaking RND is matter of code hygeine rather than a strate
 # Un-breaking your RND
 
 <div align="center">
-<img src="/blog/assets/gosper_glider_surprise.gif">
-<img src="/blog/assets/screen_tb_gosper_surprise_reward.png">
+<img src="/assets/gosper_glider_surprise.gif">
+<img src="/assets/screen_tb_gosper_surprise_reward.png">
 </div>
 
 With good initialization, dense layers in the random network, and obvious bugs eliminated, it was possible to generate an effective curiosity-based reward. In this example, I built a <a href="https://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Gosper glider gun</a>, an oscillating pattern that continuously produces small gliders. I used a fishhook eater to annihilate the gliders, yielding a stable oscillator that repeats every 30 steps. After sufficient training steps for the predictor to learn the random network distillate for this scenario, the fishhook is removed. Wrap-around gliders lead to machine destruction and general chaos that the RL agent finds quite exciting.
