@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "How to Break Your Random Network Distillation"
+date:   2019-08-24 00:00:00 +0000
+categories: jekyll update
+---
+
 # How to Break Your Random Network Distillation
 <div align="center">
 <img src="/blog/assets/small_weights_0_5_out_pred.png">
