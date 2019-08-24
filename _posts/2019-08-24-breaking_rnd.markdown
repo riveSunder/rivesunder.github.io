@@ -2,7 +2,7 @@
 layout: post
 title:  "How to Break Your Random Network Distillation"
 date:   2019-08-24 00:00:00 +0000
-categories: jekyll update
+categories: RL  
 ---
 
 # How to Break Your Random Network Distillation
@@ -10,7 +10,7 @@ categories: jekyll update
 <img src="/assets/small_weights_0_5_out_pred.png">
 </div>
 
-<em>TL:DR To be capable of curiosity-driven exploration, an agent must be capable of being surprised.  to learn features that are too similar to the rules of the universe, and as a result is apparently incapable of escaping boredom.</em>
+<em>TL:DR To be capable of curiosity-driven exploration, an agent must be capable of being surprised. In one failure mode, shown above, a random transformation is easy to learn because the values are always essentially 0.5.</em>
 
 ## The Problem
 
