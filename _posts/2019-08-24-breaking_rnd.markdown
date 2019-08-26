@@ -16,7 +16,7 @@ categories: RL
 
 The field of reinforcement learning has made great strides by incorporating deep learning neural nets, and yet RL famously <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html">doesn't really work</a> for most problems. One challenge holding RL back from having real-world impacts is reward shaping, with sparse rewards being particularly difficult to deal with. As you may know from personal experience, motivation and planning become more difficult with sporadic, sparse, and ambiguous rewards. It's comparatively easy to reinforce a new chess strategy after a successful match, and much more difficult to determine just what it was about your 10th self-published novel that caused the audience to finally bloom beyond your immediate friends and family. RL agents, humans, and pigeons in a Skinner box all have similar difficulties parsing rewards into effective strategies for future scenarios.
 
-Rather than starting from real-world scenarios and devising training algorithms capable of general intelligence from the beginning, the art of RL experimentation is in large part a matter of finding problems that our close to what known RL strategies can solve. Some heuristics denoting good candidates for RL problems include: 
+Rather than starting from real-world scenarios and devising training algorithms capable of general intelligence from the beginning, the art of RL experimentation is in large part a matter of finding problems that are close to what known RL strategies can solve. Some heuristics denoting good candidates for RL problems include: 
 
 * It should be plausible for an agent acting randomly to stumble upon rewards at every point of the learning curve.
 * Rewards and environmental state-changes can't be too stochastic. 
@@ -24,7 +24,7 @@ Rather than starting from real-world scenarios and devising training algorithms 
 
 A good reference for more useful guidelines to approaching problems from an RL perspective is John Schulmann's <a href="https://www.youtube.com/watch?v=8EcdaCk9KaQ">Nuts and Bolts of Deep RL Experimentation</a>
 
-Most RL agents learn trough some form of trial-and-error, but naively this approach can <a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">take forever</a>. Adjusting the trade-off between exploitation of learned strategies and exploration of action consequences is a central part of solving even moderately complicated RL problems. A simple way to do this is to have a parameter like 'temperature' with hotter temperatures increasing the likelihood of sampling less-likely actions.  
+Most RL agents learn through some form of trial-and-error, but naively this approach can <a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">take forever</a>. Adjusting the trade-off between exploitation of learned strategies and exploration of action consequences is a central part of solving even moderately complicated RL problems. A simple way to do this is to have a parameter like 'temperature' with hotter temperatures increasing the likelihood of sampling less-likely actions.  
 
 Improved exploration strategies involve some form of uncertainty estimation or proxy. To improve sample efficiency, it makes sense to encourage RL agents to learn to be curious by encouraging an agent to seek out unfamiliar states. One of these ways is called random network distillation, where the inability of a model to predict a fixed random transformation of the current state generates higher rewards. Notably, random network distillation is not susceptible to the <a href=""> "Noisy TV problem,"</a>that plagues next-state prediction, where an RL agent becomes addicted to stochastic state changes. In this essay we will tinker with great ways to make random network distillation a total waste of effort. 
 
@@ -57,7 +57,7 @@ Another failure mode for random network distillation occurs from bad initializat
 <img src="/assets/resetting_rn_no_surprise.png">
 </div>
 
-This last method for breaking RND is matter of code hygeine rather than a strategic mistake. Early on in this project I had a bug in my code that led to the random network being reset each episode, which led to a boost in rewards as the prediction network had to re-learn the (new) transformation each time. There's nothing clever about fixing this problem by using a static seed, but it's a good reminder that writing bug-free code can be make-or-break when building new implementations. 
+This last method for breaking RND is matter of code hygiene rather than a strategic mistake. Early on in this project I had a bug in my code that led to the random network being reset each episode, which led to a boost in rewards as the prediction network had to re-learn the (new) transformation each time. There's nothing clever about fixing this problem by using a static seed, but it's a good reminder that writing bug-free code can be make-or-break when building new implementations. 
 
 # Un-breaking your RND
 
@@ -68,7 +68,7 @@ This last method for breaking RND is matter of code hygeine rather than a strate
 
 With good initialization, dense layers in the random network, and obvious bugs eliminated, it was possible to generate an effective curiosity-based reward. In this example, I built a <a href="https://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Gosper glider gun</a>, an oscillating pattern that continuously produces small gliders. I used a fishhook eater to annihilate the gliders, yielding a stable oscillator that repeats every 30 steps. After sufficient training steps for the predictor to learn the random network distillate for this scenario, the fishhook is removed. Shortly thereafter, wrap-around gliders lead to machine destruction and general chaos that the RL agent finds quite exciting.
 
-This experiment was an action-free exploration of random network distillationg, that is, the RL agent was prevented from making any changes to the CA universe. Conway's Game of Life and similar CA rulesets could provide a fertile playground for studying creative collaborations between humans and machines. If RL agents can amplify the ability of a human CA enthusiast to discover and design cool machines in the simplified world of 2D cellular automata, that's a reasonable stepping stone to building cool machines in the real world. I'm working on this project <a href="https://gitlab.com/riveSunder/carle/tree/master">here</a>. 
+This experiment was an action-free exploration of random network distillation, that is, the RL agent was prevented from making any changes to the CA universe. Conway's Game of Life and similar CA rulesets could provide a fertile playground for studying creative collaborations between humans and machines. If RL agents can amplify the ability of a human CA enthusiast to discover and design cool machines in the simplified world of 2D cellular automata, that's a reasonable stepping stone to building cool machines in the real world. I'm working on this project <a href="https://gitlab.com/riveSunder/carle/tree/master">here</a>. 
 
 <strong>References:</strong>
 
