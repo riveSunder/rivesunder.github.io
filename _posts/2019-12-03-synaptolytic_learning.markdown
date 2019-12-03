@@ -123,7 +123,7 @@ The mk1 pruning algorithm performed the best out of the 3 algorithms tested on t
 
  The mk1 pruning algorithm tends to find simpler networks while the mk2 algorithm has a greater number of futile connections leading nowhere at generation 100 when training is stopped. The mk2 algorithm also seems to represent a greater variety in terms of the policy strategies (see below) and the variation in total number of connections in the population at each generation. Allowing training to continue may eliminate some of the differences in the policy networks found by mk1 and mk2 methods (or not).
 
-### Exploitation vs Exploitation
+### Exploitation vs Exploration
 
 By observation, the mk2 method seems to be more prone to explore than mk1. This is starkly demonstrated in the gif below demonstraing examples from the top 4 elite policies at generation 100 for each method. It's also apparent in the popultion connection statistics in the learning curves. Of course, this may be an artifact of the hyperparameter settings and could disappear when each method is optimized individually. 
 
