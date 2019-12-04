@@ -11,7 +11,7 @@ categories: RL
 <img src="/assets/synaptolysis/champion_lineup.png">
 <br>
 </div>
-<div align="center">Comparison of champion policy networks for solving the cartpole-esque `InvertedPendulum` PyBullet environment. The 7-weight network on the left was trained using the mk1 pruning algorithm described in this article, while the network on the left is the result of a covariant matrix adaptation evolution strategy. </div>
+<div align="center">Comparison of champion policy networks for solving the cartpole-esque `InvertedPendulum` PyBullet environment. The 7-weight network on the left was trained using the mk1 pruning algorithm described in this article, while the network on the left is the result of a covariance matrix adaptation evolution strategy. </div>
 
 ## Intro
 
@@ -55,9 +55,9 @@ The second variant of pruning-only learning (mk2) has more in common with distri
 
 ### Covariant Matrix Adaptation Evolution Strategy
 
-I implemented a naive covariant matrix adaptation evolution strategy (CMA-ES or CMA for short) as a point of comparison for the pruning-based methods. The current implementation used for this experiment is based on the description at [A Visual Guide to Evolution Strategies](http://blog.otoro.net/2017/10/29/visual-evolution-strategies/), however any bugs/mistakes in the implementation are my own doing. Actually I have already identified one deviation from canonical CMA-ES. In my implementation I calculate covariant matrices for each layer-to-layer weight matrix separately. In a proper CMA-ES implementation a single covariant matrix should be computed for all parameters. The current implementation works pretty well and qualitatively behaves as expected, exhibiting reasonable exploration and fine-tuning during training, but it is possible that fixing this mistake ([issue](https://github.com/riveSunder/learning-by-lopping/issues/1)) will make the pruning-based algorithms less competitive next to CMA-ES. 
+I implemented a naive covariance matrix adaptation evolution strategy (CMA-ES or CMA for short) as a point of comparison for the pruning-based methods. The current implementation used for this experiment is based on the description at [A Visual Guide to Evolution Strategies](http://blog.otoro.net/2017/10/29/visual-evolution-strategies/), however any bugs/mistakes in the implementation are my own doing. Actually I have already identified one deviation from canonical CMA-ES. In my implementation I calculate covariance matrices for each layer-to-layer weight matrix separately. In a proper CMA-ES implementation a single covariance matrix should be computed for all parameters. The current implementation works pretty well and qualitatively behaves as expected, exhibiting reasonable exploration and fine-tuning during training, but it is possible that fixing this mistake ([issue](https://github.com/riveSunder/learning-by-lopping/issues/1)) will make the pruning-based algorithms less competitive next to CMA-ES. 
 
-A covariant matrix is used to define a distribution from which parameters are sampled at each generation. The mean and covariance for each weight is computed as follows:
+A covariance matrix is used to define a distribution from which parameters are sampled at each generation. The mean and covariance for each weight is computed as follows:
 
 <div align="center">
 <img src="/assets/synaptolysis/mu_ij.png">
