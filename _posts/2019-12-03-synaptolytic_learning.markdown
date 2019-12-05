@@ -102,7 +102,7 @@ The mk1 algorithm tends to do a better job of simplifying connections, finding a
 | Pruning mk1 | 2.507e+05 +/- 9.224e+04 | 1.000e+03 +/- 0.000 |
 | Pruning mk2 | 2.743e+05 +/-9.097e+04 | 1.000e+03 +/- 0.000 |
 
-<p align="center"><strong>Table 1:</strong> Learning performance on `InvertedPendulum` pole-balancing task. As evident in the "Best agent final performance" column, this task is too easy to be intersting in this context. Of the methods tested the mk1 algorithm found the simplest network that solves the problem.</p>
+<p align="center"><strong>Table 1:</strong> Learning performance on `InvertedPendulum` pole-balancing task. As evident in the "Best agent final performance" column, this task is too easy to be interesting in this context. Of the methods tested the mk1 algorithm found the simplest network that solves the problem.</p>
 
 <div align="center">
 <img src="/assets/synaptolysis/pruning_mk1_swingup_s2.png">
@@ -110,24 +110,23 @@ The mk1 algorithm tends to do a better job of simplifying connections, finding a
 <img src="/assets/synaptolysis/cmaes_swingup_s2.png">
 </div>
 
-
 | Method | Total steps to solve | Best agent final performance |
 |------|------|-------|
 | CMA  | 3.823e+07 +/- 1.931e+07| 8.679e+02 +/- 4.244e+01 |
 | Pruning mk1 | <strong>3.4301e+07 +/- 6.432e+06</strong> |<strong>8.895e+02 +/- 3.5502e-01</strong>|
-| Pruning mk2 | 5.530e+07 | 7.767e+02 +/- 2.479e+02 |
+| Pruning mk2 | 6.656e+07 +/- 1.095e+07 | 7.767e+02 +/- 2.479e+02 |
 
 <p align="center"><strong>Table 2:</strong> Learning performance on `InvertedPendulumSwingup` task. "Best agent final performance" statistics are associated with a run of 100 episodes using the champion policy from each method.</p>
 
-The mk1 pruning algorithm performed the best out of the 3 algorithms tested on the more difficult `InvertedPendulumSwingup` task, but with only 3 seeds tested so far luck may have played on outsized role in the results. Results in final performance may also vary with prolonged training, as in the current experiment training is truncated after passing a return threshold and training for at least 100 generations.
+The mk1 pruning algorithm performed the best out of the 3 algorithms tested on the more difficult `InvertedPendulumSwingup` task, but with only 3 seeds tested so far luck may have played on outsized role in the results. Results in final performance may also vary with prolonged training, as in the current experiment training is truncated after passing a return threshold and training for at least 100 generations. The difference in sample efficiency between the mk1 pruning algorithm and CMA is probably not significant (mk2 is probably a little slower), but the final performance of the best agent found with mk1 does seem to be better.
 
- The mk1 pruning algorithm tends to find simpler networks while the mk2 algorithm has a greater number of futile connections leading nowhere at generation 100 when training is stopped. The mk2 algorithm also seems to represent a greater variety in terms of the policy strategies (see below) and the variation in total number of connections in the population at each generation. Allowing training to continue may eliminate some of the differences in the policy networks found by mk1 and mk2 methods (or not).
+It doesn't make too much sense to compare the complexity of networks found by pruning and found by CMA. Networks found with CMA (albeit with no regularization) maintain all connections and each connection is real-valued, unlike the pruning networks which can either have a connection or not, represented by weights of 1.0 or 0.0, respectively. The mk1 pruning algorithm tends to find simpler networks while the mk2 algorithm has a greater number of futile connections leading nowhere at generation 100 when training is stopped. The mk2 algorithm also seems to represent a greater variety in terms of the policy strategies (see below) and the variation in total number of connections in the population at each generation. Allowing training to continue may eliminate some of the differences in the policy networks found by mk1 and mk2 methods (or not). The difference in performance and apparent difference in exploration preferences between mk1 and mk2 algorithms could be down to mk2 being a more random policy (like comparing two DQN variants with different epsilon values) and this difference might disappear with individual optimization of each algorithm.
 
 ### Exploitation vs Exploration
 
 By observation, the mk2 method seems to be more prone to explore than mk1. This is starkly demonstrated in the gif below demonstraing examples from the top 4 elite policies at generation 100 for each method. It's also apparent in the popultion connection statistics in the learning curves. Of course, this may be an artifact of the hyperparameter settings and could disappear when each method is optimized individually. 
 
-A plausible explanation for the tendency of the mk2 method to explore more is the choice of maximum and minimum values of the pruning probability matrices in the mk2 method, set at 95% and 5%, respectively. This means that even if every member of the elite population shares a connection (or lack of connection) between a given pair of nodes, there is still a 5% chance that any given individual in the next generation will differ. 
+A plausible explanation for the tendency of the mk2 method to explore more is the choice of maximum and minimum values of the pruning probability matrices in the mk2 method, set at 95% and 5%, respectively. This means that even if every member of the elite population shares a connection (or lack of connection) between a given pair of nodes, there is still a 5% chance that any given individual in the next generation will differ.  
 
 <div align="center">
 <img src="/assets/synaptolysis/flyeye.gif">
@@ -141,6 +140,8 @@ More seeds and more interesting environments. The cartpole style `InvertedPendul
 Investigating biologically plausiblee pruning algorithms, and longer training sessions. Some recent work on artificial neural networks including a Hebbian component for meta-learning may provide inspiration (e.g., [Miconi <em>et al.</em> 2018a](https://openreview.net/forum?id=r1lrAiA5Ym), [Miconi <em>et al.</em> 2018b](https://arxiv.org/abs/1804.02464), and [Miconi 2017](https://www.biorxiv.org/content/10.1101/057729v5)).  
 
 Although the current experiment was successful in determining the ability of pruning-only algorithms to learn simple tasks, we didn't investigate the more interesting challenge of finding minimal policy networks. Is pruning a good method for finding MDL solutions to reinforcement learning? How does pruning compare to growth-based algorithms like NEAT and WANN in this regard? The latter question is interesting in light of the apparent reliance of mammalian cognitive development on pruning for learning. If there's no advantage to destructive learning, why do humans make so many extra synaptic connections only to remove them later? An interesting potential explanation is that a big population of possibly redundant neural circuits is more capable of learning new things (via pruning) than highly optimized MDL circuitry. This would suggest that ideal (machine) learners may benefit from alternating periods of exuberant synaptogenesis and selective synaptolysis, perhaps with learned triggers for when to pursue either strategy.
+
+This project has a [github repo](https://github.com/riveSunder/synaptolytic-learning)
 
 ## Bloopers
 
