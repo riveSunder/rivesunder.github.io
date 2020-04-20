@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "The RL Contest Between Cloud and Home Builds: Threadripper vs. the Cloud, Setup and Benchmarks"
-date:   2020-04-17 00:00:00 +0000
+date:   2020-04-20 00:00:00 +0000
 categories: RL 
 ---
 
