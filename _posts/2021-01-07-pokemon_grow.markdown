@@ -2,7 +2,7 @@
 layout: post
 title: "Playing Pokemon Grow with Differentiable Cellular Automata" 
 date: 2021-01-08 00:00:00 +0000
-categories: cellular automata, differentiable programming
+categories: cellular_automata, differentiable_programming
 ---
 
 <div align="center">
