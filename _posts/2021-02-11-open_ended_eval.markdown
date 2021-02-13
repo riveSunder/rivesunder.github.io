@@ -5,6 +5,12 @@ date: 2021-02-12 00:00:00 +0000
 categories: cellular_automata carle
 ---
 
+<br>
+<div align="center">
+<img width="100%" src="/assets/carle/use_this.png">
+</div>
+<br>
+
 # Challenges in evaluating open-ended exploration and creation
 
 I've been working on a reinforcement learning (RL) environment for machine exploration and creativity using Life-like cellular automata. Called CARLE (for Cellular Automata Reinforcement Learning Environment), the environment is the basis for an [official competition](https://ieee-cog.org/2021/index.html#competitions_section) at the third IEEE Conference on Games. But Carle's Game is somewhat unusual in that it is a challenge in open-endedness. In fact, the RL environment doesn't even have a native reward value, although there are several exploration reward wrappers available in the repository. 
