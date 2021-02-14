@@ -104,12 +104,12 @@ The culmination of the challenge will involve a final submission of creative age
 
 If you're thinking of entering Carle's Game for IEEE CoG 2021 and/or have ideas about evaluating machine agents in open-ended environments, @ me on Twitter [@RiveSunder](https://twitter.com/rivesunder) or leave an issue on the GitHub [repository](https://github.com/rivesunder/carle) for CARLE. I look forward to meeting the creative machines you develop and discover. 
 
-<em>Update 2021-02-14: Coral ladders are not found in the Coral universe, but rather can occur in rulesets between "Coral" (B3/45678) and "Life Withour Death" (B3/S012345678). In an earlier version of this post I describe finding the phenomenon in the Coral ruleset, but due to an implementation error I was actually working with B3/S345678. The text is updated to reflect the proper rules. </em>
-
 <br>
 <div align="center">
 <img src="/assets/carle/cool_b3s23.png" width="100%">
 </div>
 <br>
+
+<em>Update 2021-02-14: Coral ladders are not found in the Coral universe, but rather can occur in rulesets between "Coral" (B3/45678) and "Life Withour Death" (B3/S012345678). In an earlier version of this post I describe finding the phenomenon in the Coral ruleset, but due to an implementation error I was actually working with B3/S345678. The text is updated to reflect the proper rules. </em>
 
 
