@@ -1,0 +1,151 @@
+---
+layout: post
+title: "Public Domain Diagrams" 
+date: 2021-07-25 00:00:00 +0000
+categories: public_domain
+---
+
+
+# Public Domain Diagrams
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/ca_brain.png">
+<br>	
+</div>
+Brain-shaped silhouette in cellular automata patterns. 
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+<br>	
+
+This page is a collection of images and diagrams I've made to illustrate various machine learning topics. The images on this page are all released into the public domain unless otherwise noted, so feel free to use them in your own projects. Credit is appreciated but not required.
+
+## Attention
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/attention_detail.jpg">
+<br>	
+</div>
+Illustation of dot-product attention.
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+<br>	
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/attention_example.jpg">
+<br>	
+</div>
+Example of attention used on the edges of a graph. [png]({{ site.baseurl }}{% link /assets/public_domain/attention_example.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/attention_layer.jpg">
+<br>	
+</div>
+Illustation of attention encoder layer.
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+<br>	
+
+## Deep Learning
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/bigsmall_models.jpg">
+<br>	
+</div>
+Illustration of the role of model and dataset size in deep learning.
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/convolution.jpg">
+<br>	
+</div>
+Convolution. [png]({{ site.baseurl }}{% link /assets/public_domain/convolution.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/conv_Fmatrix_multi.jpg">
+<br>	
+</div>
+Convolution as element-wise multiplication in the Fourier domain. [png]({{ site.baseurl }}{% link /assets/public_domain/conv_Fmatrix_multi.png %}) 
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/mlp_simple.png">
+<br>	
+</div>
+Shallow multilayer perceptron. 
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/double_descent.jpg">
+<br>	
+</div>
+Illustation of "deep double descent."
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/overfitting.jpg">
+<br>	
+</div>
+Overfitting. [png]({{ site.baseurl }}{% link /assets/public_domain/overfitting.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+## Graphs and Graph Neural Networks
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/graph_adjacency_matrix.jpg">
+<br>	
+</div>
+A graph and its adjacency matrix. [png]({{ site.baseurl }}{% link /assets/public_domain/graph_adjacency_matrix.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/gcn_matrix_multi.jpg">
+<br>	
+</div>
+Arranging graph convolutions as matrix multiplication. [png]({{ site.baseurl }}{% link /assets/public_domain/gcn_matrix_multi.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+## Transformers
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/switch_encoder.jpg">
+<br>	
+</div>
+Illustation of a switch encoder layer. [png]({{ site.baseurl }}{% link /assets/public_domain/switch_encoder.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/transformer_attention.jpg">
+<br>	
+</div>
+Illustation of dot-product attention, used in transformers. [png]({{ site.baseurl }}{% link /assets/public_domain/transformer_attention.png %})
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
