@@ -75,6 +75,15 @@ Convolution. [png]({{ site.baseurl }}{% link /assets/public_domain/convolution.p
 
 <br>
 <div align="center">
+<img width="75%" src="/assets/public_domain/convolution_transinvariance.jpg">
+<br>	
+</div>
+Cartoon of translation invariance in convolution.
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
 <img width="75%" src="/assets/public_domain/conv_Fmatrix_multi.jpg">
 <br>	
 </div>
