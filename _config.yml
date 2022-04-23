@@ -18,10 +18,9 @@ title: The Rive Sunder Blog
 description: >- # this means to ignore newlines until "baseurl:"
   The blog of Rive Sunder
 baseurl: ""
-url: "https://rivesunder.gitlab.io"
+url: "https://rivesunder.github.io"
 twitter_username: rivesunder
-#github_username:  rivesunder
-gitlab_username: rivesunder
+github_username:  rivesunder
 
 # Build settings
 markdown: kramdown
