@@ -13,4 +13,4 @@ That's probably all you need to know for now.
 [Rive Sunder on Twitter]: https://twitter.com/rivesunder
 [Rive Sunder on Github]: https://github.com/rivesunder
 [Rive Sunder on Gitlab]: https://github.com/rivesunder
-[The Rive Sunder Blog]: https://rivesunder.github.io/blog
+[The Rive Sunder Blog]: https://rivesunder.github.io
