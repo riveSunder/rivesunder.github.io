@@ -84,9 +84,28 @@ Cartoon of translation invariance in convolution.
 
 <br>
 <div align="center">
+<img width="75%" src="/assets/public_domain/atrous1.png">
+<br>	
+</div>
+Cartoon diagram of a fully convolutional network and a conv-net with atrous convolutions
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/unet1.png">
+<br>	
+</div>
+Cartoon diagram of a U-Net style convolutional neural network.
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
+<br>
+<div align="center">
 <img width="75%" src="/assets/public_domain/conv_Fmatrix_multi.jpg">
 <br>	
 </div>
+
 Convolution as element-wise multiplication in the Fourier domain. [png]({{ site.baseurl }}{% link /assets/public_domain/conv_Fmatrix_multi.png %}) 
 {: style="color:black; font-size: 95%; text-align: center;"}
 <br>	
