@@ -183,8 +183,5 @@ Illustation of dot-product attention, used in transformers. [png]({{ site.baseur
 <div align="center">
 <img width="75%" src="/assets/public_domain/cas9_grna.png">
 <br>	
-<em> Cas9 protein with guide RNA, based on PDB structure [4OO8](https://www.rcsb.org/structure/4OO8)
+<em> Cas9 protein with guide RNA, based on PDB structure <a href="https://www.rcsb.org/structure/4OO8">4OO8</a>
 </div>
-Illustation of dot-product attention, used in transformers. [png]({{ site.baseurl }}{% link /assets/public_domain/transformer_attention.png %})
-{: style="color:black; font-size: 95%; text-align: center;"}
-<br>	
