@@ -177,11 +177,18 @@ Illustation of dot-product attention, used in transformers. [png]({{ site.baseur
 {: style="color:black; font-size: 95%; text-align: center;"}
 <br>	
 
-## Proteins
+## Protein Folding and Protein Structure
 
 <br>
 <div align="center">
 <img width="75%" src="/assets/public_domain/cas9_grna.png">
 <br>	
 <em> Cas9 protein with guide RNA, based on PDB structure <a href="https://www.rcsb.org/structure/4OO8">4OO8</a>
+</div>
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/levinthal.png">
+<br>	
+<em> Cartoon illustration of </a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">Levinthal's paradox</a>
 </div>
