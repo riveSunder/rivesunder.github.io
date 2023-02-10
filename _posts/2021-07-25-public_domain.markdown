@@ -190,5 +190,5 @@ Illustation of dot-product attention, used in transformers. [png]({{ site.baseur
 <div align="center">
 <img width="75%" src="/assets/public_domain/levinthal.png">
 <br>	
-<em> Cartoon illustration of </a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">Levinthal's paradox</a>
+<em> Cartoon illustration of <a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">Levinthal's paradox</a>
 </div>
