@@ -182,13 +182,21 @@ Illustation of dot-product attention, used in transformers. [png]({{ site.baseur
 <br>
 <div align="center">
 <img width="75%" src="/assets/public_domain/cas9_grna.png">
+</div>
 <br>	
 <em> Cas9 protein with guide RNA, based on PDB structure <a href="https://www.rcsb.org/structure/4OO8">4OO8</a>
-</div>
+</em>
 
 <br>
 <div align="center">
 <img width="75%" src="/assets/public_domain/levinthal.png">
-<br>	
-<em> Cartoon illustration of <a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">Levinthal's paradox</a>
 </div>
+<br>
+<em> Cartoon illustration of <a href="https://en.wikipedia.org/wiki/Levinthal%27s_paradox">Levinthal's paradox</a> </em>
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/msa.jpg">
+</div>
+<br>	
+<em> Cartoon representation of <a href="https://en.wikipedia.org/wiki/Multiple_sequence_alignment">multiple sequence alignment</a> in bioinformatics. </em>
