@@ -157,6 +157,18 @@ Arranging graph convolutions as matrix multiplication. [png]({{ site.baseurl }}{
 {: style="color:black; font-size: 95%; text-align: center;"}
 <br>	
 
+## Word vectors
+
+
+<br>
+<div align="center">
+<img width="75%" src="/assets/public_domain/word_vectors.jpg">
+<br>	
+</div>
+Cartoon illustrating word relationships in vector space (_e.g._ word vectors, word2vec).
+{: style="color:black; font-size: 95%; text-align: center;"}
+<br>	
+
 ## Transformers
 
 <br>
@@ -173,7 +185,7 @@ Illustation of a switch encoder layer. [png]({{ site.baseurl }}{% link /assets/p
 <img width="75%" src="/assets/public_domain/transformer_attention.jpg">
 <br>	
 </div>
-Illustation of dot-product attention, used in transformers. [png]({{ site.baseurl }}{% link /assets/public_domain/transformer_attention.png %})
+illustation of dot-product attention, used in transformers. [png]({{ site.baseurl }}{% link /assets/public_domain/transformer_attention.png %})
 {: style="color:black; font-size: 95%; text-align: center;"}
 <br>	
 
